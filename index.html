@@ -1,65 +1,85 @@
 <!DOCTYPE html>
-
 <html lang="en-us">
-
 <head>
-
 	<meta charset="UTF-8">
-
-    <title>Hangman-Game</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
-
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hangman Application</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="assets/css/style.css"> -->
+	<style>
+  /* all these styles should go in style.css */
+		.container {
+			text-align: center;
+		}
+		#game-wrapper {
+			border: 1px dotted #000;
+		}
+		#image-display{
+			border-right: 1px dotted #000;
+			border-bottom: none;
+		}
+		@media only screen and (max-width: 991.98px) { 
+			#image-display{
+			border-right: none;
+			border-bottom: 1px dotted #000;
+		}
+		}
+	</style>
 </head>
-
 <body>
-
 	<div class="container">
-		<div class="row">
-			<div class="col-sm-12">
-
-				<img class="responsivepictures" src="http://sellmobileapp.com/static//uploads/items/6928/preview.jpg"/>
-			
+		<div class="row" id="banner">
+			<div class="col-xs-12 col-sm-12 col-md-12">
+				<!-- GAME BANNER -->
+				<h1>HANGMAN APPLICATION</h1>
 			</div>
 		</div>
-
-		<div class="row">
-			<div class="col-sm-3 col-sm-offset-9 box">
-				<img class="responsivepictures" src="http://mgsautobody.co.za/wp-content/uploads/2015/04/cropped-Car-Brand-Logos-1.png" width= "400" height= "350">
+		<div class="row" id="messages">
+			<div class="col-xs-12 col-sm-12 col-md-12">
+			<!-- sub header; winer, loser, try again, error, game answer -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-6">
+						<span>Wins: </span><span id="total-wins">0</span>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-6">
+						<span>Losses: </span><span id="total-losses">0</span>
+					</div>
+				</div>
 			</div>
-
-			<div class="col-sm-12 box">
-
-				<p id="num-wins">Press space to get started!</p>
-
-				<p>Current word:</p>
-
-				<p id="current-word">What could it be?</p>
-
-			 	<p>Guesses Remaining: </p>
-
-				<p id="guesses-remaining">15</p>
-
-				<P>Letters already guessed:</P>
-
-				<p id="letters-guessed">None so far</p>
-z
+		</div>
+		<div class="row" id="out-container">
+		    <div class="col-xs-12 col-sm-12 col-md-3"></div>
+			<div class="col-xs-12 col-sm-12 col-md-6">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12" id="game-error"></div>
+				</div>
+				<div class="row" id="game-wrapper">
+					<div class="col-xs-12 col-sm-12 col-md-6 game" id="image-display">
+						<!-- left game display -->
+						<!-- images -->
+						<p></p>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-6 game" id="game-data">
+						<!-- right game display -->
+						<!-- score, messages, word guessing, letter count, etc.-->
+						<div>
+							<div>Guess the word:</div>
+							<div id="letters-dashes"></div>
+						</div>
+						<div>
+							<div>Letters guessed:</div>
+							<div id="letters-guessed"></div>
+						</div>
+						<div>
+							<div>Guesses remaining:</div>
+							<div id="guesses-remaining"></div>
+						</div>
+					</div>
+				</div>
 			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3"></div>
 		</div>
 	</div>
-
-<script type="text/javascript" src="assets/javascript/game.js"></script>
+	<script type="text/javascript" src="percobaan.js"></script>
 </body>
-
 </html>
-
-
-
-
-
