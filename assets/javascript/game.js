@@ -1,170 +1,197 @@
-var gameVariable = {
+var gameObject = {
 	currentLetter: [""],
 
 	allGuesses: [""],
+	incorrectGuesses: [""],
 	correctGuesses: [""],
-	wrongGuesses: [""],
-	orderAnswer: [""],
+	correctGuessesInOrder: [""],
 
-	carBrand: ["Toyota", "Mercedes", "Maserati", "Honda", "Jaguar", "Audi", "Infiniti", "Lexus", "Ferrari", "Bentley"];
-
+	bandsArray: ["BMW", "TOYOTA", "LEXUS", "SCION", "HONDA"],
 	randomWord: [""],
-	allWords: [""],
+	bandLetters:[""],
 
-	isRepeat: true,
 	isMatch: true,
+	isRepeat: true,
 
-	wins: 0,
-	losses: 0,
 	guessesRemaining: 15,
+	loseCount: 0,
+	winCount:0,
 
-	computerWord: function() {
-		var computerGuess = Math.random() * 10;
-		computerGuess = Math.floor(computerGuess);
-		
-		this.randomWord = this.carBrand[computerGuess];
-		this.allWords = this.randomWord.split("");
+	generateWord: function(){
+		//Generate a random number from 0-8
+		var random_num = Math.random() * 9;
+		random_num = Math.floor(random_num);
 
-		console.log(this.randomWord + " " + this.allWords);
+		//Assign randomWord to a word from the array whose index was chosen randomly.
+		//Split the string into an array containing the individual letters of the randomly chosen word
+		this.randomWord = this.bandsArray[random_num];
+		this.bandLetters = this.randomWord.split("");
 
+		//Shows that a randomly chosen band name was converted into an array containing each of its letters.
+		console.log(this.randomWord + " " + this.bandLetters);
+
+		//Since this function will only run on a win/loss, reset the guesses arrays
 		this.allGuesses = [];
-		this.wrongGuesses = [];
+		this.incorrectGuesses = [];
 		this.correctGuesses = [];
-		this.orderAnswer = [];
+		this.correctGuessesInOrder = [];
 		this.guessesRemaining = 15;
-	};
+	},
 
-	checker: function() {
-		var repeat = -1;
+	checkRepeat: function(){
+		var repeatCounter = -1;
 
-		for(var i = 0; i < this.allGuesses.length; i++) {
-			if (this.currentLetter == this.allGuesses[i]) {
-				repeat ++;
+		//Loop for the number of guesses previously made amount of times.
+		//If the current letter equals one from the array of allGuesses, the counter variable counts up one.
+		for (var i=0; i < this.allGuesses.length; i++){
+			if (this.currentLetter == this.allGuesses[i]){
+				repeatCounter++;
 			}
 		}
-
-		if (repeat == 0) {
+		//If-* counter is zero, the global isRepeat variable becomes false (signifying no matches found)
+		//Otherwise a match was found and isRepeat becomes true.
+		if (repeatCounter == 0){
 			this.isRepeat = false;
 		}
-
-		else {
+		else{
 			this.isRepeat = true;
 		}
-	};
+	},
+	checkMatch: function(){
+		var matchCounter = 0;
 
-	wordMatch: function() {
-		var matchCheck = 0;
-
-		for (var i = 0; i < this.allWords.length; i++) {
-			if (this.currentLetter == this.allWords[i]) {
-				matchCheck++;
+		//Loop for the band names length amount of times.
+		//If the guessed letter is equal to the the bands letter at a given index, the counter variable counts up one.
+		for (var i=0; i < this.bandLetters.length; i++){
+			if (this.currentLetter == this.bandLetters[i]){
+				matchCounter++;
 			}
 		}
-
-		if (matchCheck == 0) {
+		//If counter is zero, the global isMatch variable becomes false (signifying no matches found)
+		//Otherwise a match was found and isMatch becomes true.
+		if (matchCounter == 0){
 			this.isMatch = false;
 		}
-
-		else {
+		else{
 			this.isMatch = true;
 		}
-	};
-
-	matchRepeat: function() {
-
-		if (this.isRepeat == true) {
+	},
+	match_repeatComparison: function(){
+		//If the same key is pressed twice, it is removed from allGuesses.
+		if (this.isRepeat == true){
 			this.allGuesses.pop(this.currentLetter);
 		}
-
-		if (this.isRepeat == false && this.isMatch == false) {
-			this.wrongGuesses.push(this.currentLetter);
+		//Letter has not been guessed and was a wrong guess, put the currentLetter in incorrectGuesses.
+		if (this.isRepeat == false && this.isMatch == false){
+			this.incorrectGuesses.push(this.currentLetter);
 			this.guessesRemaining--;
 		}
-
-		if (this.isRepeat == false && this.isMatch == true) {
+		//Letter has not been guessed and was a correct guess, put the currentLetter in correctGuesses.
+		if (this.isRepeat == false && this.isMatch == true){
 			this.correctGuesses.push(this.currentLetter);
 			this.guessesRemaining--;
-		}	
-	};
-
-	brandIdentity: function() {
-
-		if (this.correctGuesses.length == 0) {
-			for (var i = 0; i < this.allWords.length; i++) {
-				this.orderAnswer[i] = " - ";
+		}
+	},
+	revealBand: function(){
+		//If there are no correctGuesses,
+		//For the number of letters in the bands name, fill the displayed guesses with an underscore.
+		if (this.correctGuesses.length == 0){
+			for (var i =0; i<this.bandLetters.length; i++){
+				this.correctGuessesInOrder[i] = "_";
 			}
 		}
-
 		else {
-			for (var i = 0; i < this.allWords.length; i++) {
-				if (this.orderAnswer[i] != this.allWords[i]) {
-					for (var j = 0; j < this.correctGuesses.length; j++) {
-						if (this.correctGuesses[j] == this.allWords[i]) {
-							this.orderAnswer[i] = this.allWords[i];
+			//For the length of the bands name,
+			for (var i=0; i<this.bandLetters.length; i++){
+				//If the displayed guess is not the same as bandletters at index i,
+				if (this.correctGuessesInOrder[i] != this.bandLetters[i]){
+					//Loop for correctGuesses length number of times,
+					for (var j=0; j<this.correctGuesses.length; j++){
+						//If the correctGuesses at j is equal to bandLetters at i, the displayedGuess becomes the bandletter at index i
+						if (this.correctGuesses[j] == this.bandLetters[i]){
+							this.correctGuessesInOrder[i] = this.bandLetters[i];
 						}
-
+						//Otherwise the displayedGuess at index i (corresponding to the band letter's indexes) becomes an underscore.
 						else {
-							this.orderAnswer[i] = " - ";
+							this.correctGuessesInOrder[i] = "_";
 						}
 					}
 				}
 			}
 		}
 
-		document.getElementById("current-word").innerHTML = this.orderAnswer.join(" ");
-		document.getElementById("num-wins").innerHTML = ("Wins: " + this.wins + " " + "Losses: " + this.losses);
-		document.getElementById("letters-guessed").innerHTML = this.wrongGuesses;
+		document.getElementById("current-word").innerHTML = this.correctGuessesInOrder.join(" ");
+		document.getElementById("num-wins").innerHTML = ("Wins: " + this.winCount + "  " + "Losses: " + this.loseCount);
+		document.getElementById("letters-guessed").innerHTML = this.incorrectGuesses;
 		document.getElementById("guesses-remaining").innerHTML = this.guessesRemaining;
-	};
-	
-	result: function() {
-		var progress = 0;
+	},
+	checkProgress: function(){
+		var counter = 0;
 
-		for (var i = 0; i < this.allWords.length; i++) {
-			if (this.orderAnswer[i] == this.allWords[i]) {
-				progress++;
+		//Loop a number of times equal to the length of the band name. 
+		//If a guess is equal to the the band letter at the same index, add 1 to the counter.
+		for (var i=0; i<this.bandLetters.length; i++){
+			if (this.correctGuessesInOrder[i] == this.bandLetters[i]){
+				counter++;
 			}
 		}
 
-		if (progress == this.allWords.length) {
-			alert("You win!!!");
-			this.wins++;
-			this.computerWord();
+		//If the counter is the length of the band name, the user has won.
+		if (counter == this.bandLetters.length){
+			alert("You win");
+			this.winCount++;
+			this.generateWord();
 		}
-
-		if (this.guessesRemaining == 0) {
-			alert("You lose!!!");
-			this.losses++;
-			this.computerWord();
+		//If the number of guesses remaining is zero, the user has lost.
+		if (this.guessesRemaining == 0){
+			alert("You lose!");
+			this.loseCount++;
+			this.generateWord();
 		}
 	}
 }
-	
-var gameStart = false;
 
-document.onkeyup = function(event) {
-	gameVariable.currentLetter = String.fromCharCode(event.keyCode).toUpperCase();
+var userStartedGameOnce = false;
 
-		if(gameVariable.currentLetter == " " && gameStart == false) {
+//On every keyup...
+document.onkeyup = function(q) {
 
-			gameVariable.computerWord();
-			gameStart = true;
-		}
+	//currentLetter is grabbed from the keyboard and converted to upper case.
+	//Then the letter is pushed into the allGuesses array
+	gameObject.currentLetter = String.fromCharCode(q.keyCode).toUpperCase();
 
-		gameVariable.allGuesses.push(gameVariable.currentLetter);
-		console.log("Current Letter: " + gameVariable.currentLetter + "\n" + "Letters: " + gameVariable.allWords + "\n" + "Guesses: " + gameVariable.allGuesses);
+	//If the user presses the space button upon loading the page, start the game.
+	if (gameObject.currentLetter == " " && userStartedGameOnce == false){
 
-		gameVariable.checker();
-		gameVariable.wordMatch();
 
-		gameVariable.matchRepeat();
+		gameObject.generateWord();
 
-		console.log("Correct Guesses: " + gameVariable.correctGuesses);
-		console.log("Wrong Guesses: " + gameVariable.wrongGuesses);
-		console.log("Guesses Remaining: " + gameVariable.guessesRemaining);
+		userStartedGameOnce = true;
 
-	gameVariable.brandIdentity();
-	console.log(gameVariable.orderAnswer);
+	}
 
-	gameVariable.result();
+	gameObject.allGuesses.push(gameObject.currentLetter);
+
+	console.log("Current Letter: " + gameObject.currentLetter + "\n" + "Band Letters: " + gameObject.bandLetters + "\n" + "All Guesses: " + gameObject.allGuesses);
+
+
+	//Checks to see if the letter has been typed before.
+	//Checks to see if the letter matches with one in the band name.
+	gameObject.checkRepeat();
+	gameObject.checkMatch();
+
+
+	//This function determines which array to push the currentLetter into.
+	gameObject.match_repeatComparison();
+
+	console.log("Correct Guesses: " + gameObject.correctGuesses);
+	console.log("Incorrect Guesses: " + gameObject.incorrectGuesses);
+	console.log("Guesses Remaining:" + gameObject.guessesRemaining);
+
+	//Reveals the band name as it is being guessed.
+	gameObject.revealBand();
+	console.log(gameObject.correctGuessesInOrder);
+
+	//Check to see if the game is still in progress or if a win/lose has happened
+	gameObject.checkProgress();
 }
